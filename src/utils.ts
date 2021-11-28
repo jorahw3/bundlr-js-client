@@ -27,7 +27,7 @@ export default class Utils {
      * Gets the nonce used for withdrawl request validation from the bundler
      * @returns nonce for the current user
      */
-    public async getNonce(): Promise<number> {
+    getNonce = async (): Promise<number>  => {
         const res = await this.api.get(`/account/withdrawals/${this.currency}?address=${this.config.address}`);
         Utils.checkAndThrow(res);
         return (res).data;
@@ -38,7 +38,7 @@ export default class Utils {
      * @param address the user's address to query
      * @returns the balance in winston
      */
-    public async getBalance(address: string): Promise<number> {
+    getBalance = async (address: string): Promise<number> => {
         const res = await this.api.get(`/account/balance/${this.currency}?address=${address}`);
         Utils.checkAndThrow(res);
         return res.data.balance;
@@ -48,7 +48,7 @@ export default class Utils {
      * Queries the bundler to get it's address for a specific currency
      * @returns the bundler's address
      */
-    public async getBundlerAddress(currency: string): Promise<string> {
+    getBundlerAddress = async (currency: string): Promise<string> => {
         const res = await this.api.get("/info");
         const address = res.data.addresses[currency]
         if (!address) {

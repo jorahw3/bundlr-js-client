@@ -19,7 +19,7 @@ export default class Uploader {
      * @param path to the file to be uploaded
      * @returns the response from the bundler
      */
-    public async uploadFile(path: string): Promise<AxiosResponse<any>> {
+    uploadFile = async (path: string): Promise<AxiosResponse<any>> => {
         if (!promises.stat(path).then(_ => true).catch(_ => false)) {
             throw new Error(`Unable to access path: ${path}`);
         }
@@ -36,7 +36,7 @@ export default class Uploader {
      * @param tags
      * @returns the response from the bundler
      */
-    public async upload(data: Buffer, tags: { name: string, value: string }[]): Promise<AxiosResponse<any>> {
+    upload = async (data: Buffer, tags: { name: string, value: string }[]): Promise<AxiosResponse<any>> => {
         // try {
         const signer = this.walletProvider.getSigner();
         const dataItem = createData(
@@ -45,6 +45,7 @@ export default class Uploader {
             { tags }
         );
         await dataItem.sign(signer);
+        console.log('dataItem id:', dataItem.id, dataItem.rawId);
         const { protocol, host, port } = this.api.getConfig();
         const res = await this.api.post(`${protocol}://${host}:${port}/tx/${this.walletProvider.currency}`, dataItem.getRaw(), {
             headers: { "Content-Type": "application/octet-stream", },

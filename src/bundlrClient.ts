@@ -71,7 +71,7 @@ export class BundlrClient {
         this.address = await this.walletProvider.activate();
         this.utils = new Utils(this.api, this.currency, { address: this.address });
         this.uploader = new Uploader(this.api, this.walletProvider)
-        this.funder = new Fund(this.utils, this.withdrawBalance);
+        this.funder = new Fund(this.utils, this.walletProvider);
     }
 
 
@@ -91,7 +91,7 @@ export class BundlrClient {
      * @param address address to query for
      * @returns the balance (in winston)
      */
-    async getBalance(address: string): Promise<number> {
+    getBalance = async (address: string): Promise<number> => {
         return this.utils.getBalance(address)
     }
     /**
@@ -99,7 +99,7 @@ export class BundlrClient {
      * @param amount amount to send in winston
      * @returns Arweave transaction
      */
-    async fund(amount: number, multiplier?: number): Promise<any> {
+    fund = async (amount: number, multiplier?: number): Promise<any> => {
         return this.funder.fund(amount, multiplier)
     }
     /**
@@ -107,7 +107,11 @@ export class BundlrClient {
      * @param path path to the file to upload
      * @returns bundler response
      */
-    async uploadFile(path: string): Promise<AxiosResponse<any>> {
+    uploadFile = async (path: string): Promise<AxiosResponse<any>> => {
         return this.uploader.uploadFile(path);
+    };
+
+    upload = async (content: Buffer, tags: { name: string, value: string }[]): Promise<AxiosResponse<any>> => {
+        return this.uploader.upload(content, tags);
     };
 }

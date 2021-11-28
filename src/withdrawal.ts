@@ -4,6 +4,7 @@ import { AxiosResponse } from "axios";
 import Utils from "./utils";
 import Api from "arweave/node/lib/api";
 import BigNumber from "bignumber.js";
+import { WalletProvider } from "./walletProvider";
 
 interface data {
     publicKey: string | Buffer,
@@ -21,11 +22,14 @@ interface data {
  * @param amount amount to withdraw in winston
  * @returns the response from the bundler
  */
-export async function withdrawBalance(utils: Utils, api: Api, amount: BigNumber, walletProvider: any): Promise<AxiosResponse> {
+export async function withdrawBalance(utils: Utils, api: Api, amount: BigNumber, walletProvider: WalletProvider): Promise<AxiosResponse> {
     // //todo: make util functions directly return data rather than having to post-return mutate
-    const data = { publicKey: await walletProvider.getPublicKey(), currency: walletProvider.currency, amount: amount.toString(), nonce: await utils.getNonce() } as data;
+    const publicKeyHex = await walletProvider.getPublicKey();
+    console.log('---------------------',publicKeyHex)
+    const data = { publicKey: Buffer.from(publicKeyHex, 'hex'), currency: walletProvider.currency, amount: amount.toString(), nonce: await utils.getNonce() } as data;
     const deephash = await deepHash([stringToBuffer(data.currency), stringToBuffer(data.amount.toString()), stringToBuffer(data.nonce.toString())]);
-    data.signature = await walletProvider.sign(deephash)
+    const signer = this.walletProvider.getSigner();
+    data.signature = await signer.sign(deephash)
     const ds = JSON.stringify(data);
     const du = JSON.parse(ds);
 

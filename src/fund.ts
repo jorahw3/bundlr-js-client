@@ -11,7 +11,7 @@ export default class Fund {
         this.walletProvider = walletProvider;
     }
 
-    public async fund(amount: number, multiplier = 1.0): Promise<any> {
+    fund = async (amount: number, multiplier = 1.0): Promise<any> => {
         if (!Number.isInteger(amount)) { throw new Error("must use an integer for funding amount") }
         const to = await this.utils.getBundlerAddress(this.walletProvider.currency);
         let baseFee;

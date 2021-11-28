@@ -1,8 +1,10 @@
 import { providers } from 'ethers'
 import { Signer } from 'arbundles/build/signing'
+import { SignatureConfig, SIG_CONFIG } from 'arbundles/build/constants'
 import { extractPublicKey } from '@metamask/eth-sig-util'
 import { WalletProvider } from './index'
 import BigNumber from 'bignumber.js';
+import keccak256 from 'keccak256'
 
 
 export class InjectedWalletProvider implements WalletProvider {
@@ -55,22 +57,19 @@ export class InjectedWalletProvider implements WalletProvider {
             const accounts = await ethereum.send('eth_requestAccounts');
             const provider = new providers.Web3Provider(ethereum)
             this._provider = provider;
-            this.injectedSigner = new InjectedSigner(this);
+            const publickey = await this.getPublicKey()
+            this.injectedSigner = new InjectedSigner(this, Buffer.from(publickey, 'hex'));
             this.active = true;
-            console.log(accounts.result[0])
             return accounts.result[0]
         }
     }
 
     getPublicKey = async () => {
-        if (this.active) {
             const signer = this._provider.getSigner();
             const data = "Bundlr JS Client"
             const signature = await signer.signMessage(data)
-            return extractPublicKey({ data, signature })
-        } else {
-            throw new Error("not connected")
-        }
+            const publicKeyHex= extractPublicKey({ data, signature })
+            return `04${publicKeyHex.slice(2,)}`
     }
 
     accessSigner() {
@@ -82,20 +81,39 @@ export class InjectedWalletProvider implements WalletProvider {
 const fromHexString = hexString =>
     new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
+const toHexString = bytes =>
+    bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 
-class InjectedSigner extends Signer {
+
+class InjectedSigner implements Signer {
+    readonly ownerLength: number = SIG_CONFIG[SignatureConfig.ETHERIUM].pubLength;
+    readonly signatureLength: number =
+        SIG_CONFIG[SignatureConfig.ETHERIUM].sigLength;
+    readonly signatureType: SignatureConfig = SignatureConfig.ETHERIUM;
     private injectedProvider: InjectedWalletProvider;
+    public readonly publicKey: Buffer;
 
-    constructor(injectedProvider: InjectedWalletProvider) {
-        super();
+    constructor(injectedProvider: InjectedWalletProvider, publicKey: Buffer) {
         this.injectedProvider = injectedProvider
+        this.publicKey = publicKey;
     }
+    
 
-    async sign(message: Uint8Array) {
+    sign = async (message: Uint8Array) => {
         const signer = this.injectedProvider.accessSigner();
-        const signatureHex = await signer.signMessage(message);
-        let signatureRS = signatureHex.slice(2, 129)
-        return fromHexString(signatureRS)
+        console.log('sign message:', toHexString(message));
+        const messageBytes = Buffer.concat([
+            Buffer.from("\x19Ethereum Signed Message:\n"),
+            new Uint8Array(1).fill(message.byteLength),
+            message
+        ])
+
+        const signatureHex = await signer._legacySignMessage(keccak256(messageBytes));
+        console.log('signature:', signatureHex);
+        let sig = signatureHex.substr(2)
+        let r = sig.substr(0,64)
+        let s = sig.substr(64,64)
+        return fromHexString(r+s)
     }
 }
 
