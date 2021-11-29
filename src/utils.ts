@@ -1,5 +1,6 @@
 import Api from "arweave/node/lib/api";
 import { AxiosResponse } from "axios";
+import BigNumber from "bignumber.js";
 
 export default class Utils {
     public api: Api;
@@ -55,5 +56,11 @@ export default class Utils {
             throw new Error(`Specified bundler does not support currency ${currency}`);
         }
         return address;
+    }
+
+    getStorageCost = async (currency: string, bytes: number): Promise<BigNumber> => {
+        const res = await this.api.get(`/price/${currency}/${bytes}`)
+        Utils.checkAndThrow(res);
+        return new BigNumber((res).data);
     }
 }

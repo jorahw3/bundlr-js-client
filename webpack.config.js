@@ -1,5 +1,4 @@
 const path = require('path');
- const HtmlWebpackPlugin = require('html-webpack-plugin');
  const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 
@@ -10,13 +9,10 @@ const path = require('path');
    },
    plugins: [
     new NodePolyfillPlugin(),
-     new HtmlWebpackPlugin({
-      title: 'Development',
-     }),
    ],
    output: {
      filename: '[name].bundle.js',
-     path: path.resolve(__dirname, 'dist'),
+     path: path.resolve(__dirname, 'sample/js'),
      clean: true,
    },
    resolve: {

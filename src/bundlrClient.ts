@@ -6,9 +6,7 @@ import Uploader from "./upload";
 import Fund from "./fund";
 import { AxiosResponse } from "axios";
 import { WalletProvider} from './walletProvider'
-// import Arweave from "arweave";
 
-// export let arweave;
 export const keys: { [key: string]: { key: string, address: string } } = {};
 
 export interface Config {
@@ -17,23 +15,6 @@ export interface Config {
     APIConfig: ApiConfig,
     gatewayConfig: ApiConfig,
 }
-
-
-// export enum Currencies {
-//     ARWEAVE = "arweave",
-//     SOLANA = "solana",
-//     AVALANCHE = "avalanche",
-//     MATIC = "matic"
-// }
-
-// export interface ApiConfig {
-//     host?: string;
-//     protocol?: string;
-//     port?: string | number;
-//     timeout?: number;
-//     logging?: boolean;
-//     logger?: Function;
-//   }
 
 const SUPPORTED_CURRENCE = ["matic", "arweave"]
 
@@ -68,7 +49,9 @@ export class BundlrClient {
     }
 
     async init() {
-        this.address = await this.walletProvider.activate();
+        const [address, publicKey] = await this.walletProvider.activate();
+        this.address = address
+        this.publicKey = publicKey
         this.utils = new Utils(this.api, this.currency, { address: this.address });
         this.uploader = new Uploader(this.api, this.walletProvider)
         this.funder = new Fund(this.utils, this.walletProvider);
@@ -114,4 +97,8 @@ export class BundlrClient {
     upload = async (content: Buffer, tags: { name: string, value: string }[]): Promise<AxiosResponse<any>> => {
         return this.uploader.upload(content, tags);
     };
+
+    getBundlerAddress = async () => {
+        return this.utils.getBundlerAddress(this.currency);
+    }
 }

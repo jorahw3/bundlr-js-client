@@ -60,13 +60,15 @@ export class InjectedWalletProvider implements WalletProvider {
             const publickey = await this.getPublicKey()
             this.injectedSigner = new InjectedSigner(this, Buffer.from(publickey, 'hex'));
             this.active = true;
-            return accounts.result[0]
+            return [accounts.result[0], publickey]
+        } else {
+            throw new Error('install metamask first');
         }
     }
 
     getPublicKey = async () => {
             const signer = this._provider.getSigner();
-            const data = "Bundlr JS Client"
+            const data = "Bundlr JS Client Would like to access this account"
             const signature = await signer.signMessage(data)
             const publicKeyHex= extractPublicKey({ data, signature })
             return `04${publicKeyHex.slice(2,)}`

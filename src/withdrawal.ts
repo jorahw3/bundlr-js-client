@@ -25,7 +25,6 @@ interface data {
 export async function withdrawBalance(utils: Utils, api: Api, amount: BigNumber, walletProvider: WalletProvider): Promise<AxiosResponse> {
     // //todo: make util functions directly return data rather than having to post-return mutate
     const publicKeyHex = await walletProvider.getPublicKey();
-    console.log('---------------------',publicKeyHex)
     const data = { publicKey: Buffer.from(publicKeyHex, 'hex'), currency: walletProvider.currency, amount: amount.toString(), nonce: await utils.getNonce() } as data;
     const deephash = await deepHash([stringToBuffer(data.currency), stringToBuffer(data.amount.toString()), stringToBuffer(data.nonce.toString())]);
     const signer = this.walletProvider.getSigner();

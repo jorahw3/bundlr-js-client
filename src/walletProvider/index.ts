@@ -8,7 +8,7 @@ export interface WalletProvider {
     currency: string;
     unit: string;
 
-    activate(): Promise<string>;
+    activate(): Promise<string[]>;
     
     getFee(amount: BigNumber | number, to: string): Promise<BigNumber>
 
