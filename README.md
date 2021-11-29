@@ -46,7 +46,7 @@ await bundlr.fund(amount);
 
 
 ## Demo
-please run the following command to see the demo
+please ensure you have Metamask installed and added the Matic network, run the following command to see the demo
 
 ```
 yarn demo
