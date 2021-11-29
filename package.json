@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "demo": "yarn prod:build && webpack && npx http-server ./sample/",
+    "demo": "yarn prod:build && webpack && npx http-server ./docs/",
     "prod:build": "tsc -p tsconfig.release.json"
   },
   "dependencies": {
