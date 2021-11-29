@@ -12,7 +12,7 @@ const path = require('path');
    ],
    output: {
      filename: '[name].bundle.js',
-     path: path.resolve(__dirname, 'sample/js'),
+     path: path.resolve(__dirname, 'doc/js'),
      clean: true,
    },
    resolve: {
