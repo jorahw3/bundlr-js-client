@@ -15,7 +15,6 @@ const getPriceButton = document.getElementById('getPrice');
 const getBundlerAddressButton = document.getElementById('getBundlerAddress');
 const fundButton = document.getElementById('fundButton');
 const uploadButton = document.getElementById('uploadButton');
-const withdrawButton = document.getElementById('withdrawButton');
 
 
 // texts
@@ -26,12 +25,10 @@ const priceDiv = document.getElementById('price');
 const bundlrAddressDiv = document.getElementById('bundlrAddress')
 const fundResultDiv = document.getElementById('fundResult')
 const uploadResultDiv = document.getElementById('uploadResult');
-const WithdrawResultDiv = document.getElementById('WithdrawResult');
 
 // forms
 const fundInputForm = document.getElementById('fundInput');
 const uploadFrom = document.getElementById('uploadInput')
-const withdrawForm = document.getElementById('withdrawInput')
 
 const network = "matic";
 const unit = "wei";
@@ -52,7 +49,6 @@ function initPage() {
     getBundlerAddressButton.disabled = true;
     fundButton.disabled = true;
     uploadButton.disabled = true;
-    withdrawButton.disabled = true;
 
     addressResultDiv.innerHTML = "";
     pubkeyResultDiv.innerHTML = "";
@@ -61,11 +57,10 @@ function initPage() {
     bundlrAddressDiv.innerHTML = "";
     fundResultDiv.innerHTML = "";
     uploadResultDiv.innerHTML = "";
-    WithdrawResultDiv.innerHTML = "";
 
     fundInputForm.value = "";
     uploadFrom.value = "";
-    withdrawForm.value = "";
+
 
 }
 
@@ -79,7 +74,6 @@ function postConnectWallet(bc) {
     getBundlerAddressButton.disabled = false;
     fundButton.disabled = false;
     uploadButton.disabled = false;
-    withdrawButton.disabled = false;
     addressResultDiv.innerHTML = bc.address;
     pubkeyResultDiv.innerHTML = bc.publicKey;
 }
@@ -147,17 +141,6 @@ uploadButton.onclick = async () => {
         }])
         console.log(result)
         uploadResultDiv.innerHTML = JSON.stringify(result.data)
-    } catch (e) {
-        console.error(e)
-    }
-}
-
-withdrawButton.onclick = async () => {
-    try {
-        const amount = withdrawForm.value
-        const result = await bc.withdrawBalance(parseInt(amount))
-        console.log(result)
-        WithdrawResultDiv.innerHTML = JSON.stringify(result)
     } catch (e) {
         console.error(e)
     }

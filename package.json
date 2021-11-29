@@ -4,12 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "demo": "yarn prod:build && webpack && npx http-server ./docs/",
+    "demo": "yarn prod:build && webpack && npx http-server -a 0.0.0.0 ./sample",
     "prod:build": "tsc -p tsconfig.release.json"
   },
   "dependencies": {
     "@metamask/eth-sig-util": "^4.0.0",
-    "arbundles": "^0.3.2",
+    "arbundles": "^0.4.0",
     "arweave": "^1.10.17",
     "base64url": "^3.0.1",
     "bignumber.js": "^9.0.1",

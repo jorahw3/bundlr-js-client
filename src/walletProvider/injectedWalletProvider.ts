@@ -4,7 +4,6 @@ import { SignatureConfig, SIG_CONFIG } from 'arbundles/build/constants'
 import { extractPublicKey } from '@metamask/eth-sig-util'
 import { WalletProvider } from './index'
 import BigNumber from 'bignumber.js';
-import keccak256 from 'keccak256'
 
 
 export class InjectedWalletProvider implements WalletProvider {
@@ -83,9 +82,6 @@ export class InjectedWalletProvider implements WalletProvider {
 const fromHexString = hexString =>
     new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
-const toHexString = bytes =>
-    bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
-
 
 class InjectedSigner implements Signer {
     readonly ownerLength: number = SIG_CONFIG[SignatureConfig.ETHERIUM].pubLength;
@@ -103,15 +99,7 @@ class InjectedSigner implements Signer {
 
     sign = async (message: Uint8Array) => {
         const signer = this.injectedProvider.accessSigner();
-        console.log('sign message:', toHexString(message));
-        const messageBytes = Buffer.concat([
-            Buffer.from("\x19Ethereum Signed Message:\n"),
-            new Uint8Array(1).fill(message.byteLength),
-            message
-        ])
-
-        const signatureHex = await signer._legacySignMessage(keccak256(messageBytes));
-        console.log('signature:', signatureHex);
+        const signatureHex = await signer.signMessage(message);
         let sig = signatureHex.substr(2)
         let r = sig.substr(0,64)
         let s = sig.substr(64,64)

@@ -1506,10 +1506,10 @@ ar-gql@^0.0.6:
   dependencies:
     axios "^0.21.1"
 
-arbundles@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/arbundles/-/arbundles-0.3.2.tgz#1a522ccc85e0c2ad2c5ac6ae0fb63e2f6f6e15dd"
-  integrity sha512-A50a4ahkebggY2GEyMFDJqdwAYjEMhaYjiFUlpaNm5gyZnDfmDEo0IKQoikh8a81S44w5R2d1RdzQEmME+/zKg==
+arbundles@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/arbundles/-/arbundles-0.4.0.tgz#32b08c8fadde614581e852d8743e4fe68beda726"
+  integrity sha512-qT+QDPy0Mr/4CimF0lfCpgL11xo+YAQgggCzbmGr4RyWyM25/paE4+o8Jc4lEoREscsEgKj3fIVvTTocgM5rVA==
   dependencies:
     "@akiroz/size-chunker-stream" "^0.0.1"
     "@toruslabs/eccrypto" "^1.1.7"
@@ -1527,6 +1527,7 @@ arbundles@^0.3.2:
     bs58 "^4.0.1"
     combined-stream2 "^1.1.2"
     curve25519-js "^0.0.4"
+    ethers "^5.5.1"
     keccak256 "^1.0.3"
     multistream "^4.1.0"
     noble-ed25519 "^1.2.6"

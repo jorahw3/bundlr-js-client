@@ -5,14 +5,14 @@ const path = require('path');
  module.exports = {
   mode: 'development',
    entry: {
-     sample: './docs/index.js',
+     sample: './sample/index.js',
    },
    plugins: [
     new NodePolyfillPlugin(),
    ],
    output: {
      filename: '[name].bundle.js',
-     path: path.resolve(__dirname, 'docs/js'),
+     path: path.resolve(__dirname, 'sample/js'),
      clean: true,
    },
    resolve: {

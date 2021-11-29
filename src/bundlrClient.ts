@@ -58,7 +58,7 @@ export class BundlrClient {
     }
 
 
-    async withdrawBalance(amount) {
+    withdrawBalance = async (amount) => {
         return withdrawBalance(this.utils, this.api, amount, this.walletProvider);
     }
 
