@@ -6,7 +6,7 @@ This library provides a `WalletProvider` interface which is to provider signing 
 
 Currently the `InjectedWalletProvider`(like Metemask) has been implemented. But it is easy to implement other WalletProvider like WalletConnect or even Solana Wallet.
 
-## install
+## Install
 ```
     yarn install
 ```
