@@ -53,3 +53,5 @@ yarn demo
 ```
 
 please check the sample folder for detail and code.
+
+![screenshot](./demo.png)
