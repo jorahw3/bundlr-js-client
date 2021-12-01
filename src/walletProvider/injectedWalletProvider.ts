@@ -79,9 +79,8 @@ export class InjectedWalletProvider implements WalletProvider {
 
 }
 
-const fromHexString = hexString =>
-    new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-
+// const fromHexString = hexString =>
+//     new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
 class InjectedSigner implements Signer {
     readonly ownerLength: number = SIG_CONFIG[SignatureConfig.ETHERIUM].pubLength;
@@ -99,11 +98,8 @@ class InjectedSigner implements Signer {
 
     sign = async (message: Uint8Array) => {
         const signer = this.injectedProvider.accessSigner();
-        const signatureHex = await signer.signMessage(message);
-        let sig = signatureHex.substr(2)
-        let r = sig.substr(0,64)
-        let s = sig.substr(64,64)
-        return fromHexString(r+s)
+        const signatureHex = await signer.signMessage(message);    
+        return Buffer.from(signatureHex.slice(2), "hex")
     }
 }
 
