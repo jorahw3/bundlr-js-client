@@ -27,6 +27,9 @@ const bundlrAddressDiv = document.getElementById('bundlrAddress')
 const fundResultDiv = document.getElementById('fundResult')
 const uploadResultDiv = document.getElementById('uploadResult');
 const WithdrawResultDiv = document.getElementById('withdrawResult');
+const errorMessageDiv = document.getElementById('errorMessage');
+const errorMessageBoxDiv = document.getElementById('errorMessageBox');
+
 
 // forms
 const fundInputForm = document.getElementById('fundInput');
@@ -86,9 +89,15 @@ function postConnectWallet(bc) {
 const bc = new BundlrClient(nodeUrl, network, wp)
 
 connectWalletButton.onclick = async () => {
-    await bc.init();
-    postConnectWallet(bc);
-    console.log('wallet connected')
+    try {
+        await bc.init();
+        postConnectWallet(bc);
+        console.log('wallet connected')
+    } catch (e) {
+        console.error(e)
+        errorMessageDiv.innerHTML = e.message;
+        errorMessageBoxDiv.classList.remove('hide-item')
+    }
 }
 
 

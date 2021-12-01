@@ -6,6 +6,12 @@ import { WalletProvider } from './index'
 import BigNumber from 'bignumber.js';
 
 
+const SUPPORTED_NETWORKS = {
+    'matic':{
+        chainId: 137
+    }
+}
+
 export class InjectedWalletProvider implements WalletProvider {
     public currency: string;
     public unit: string;
@@ -56,6 +62,10 @@ export class InjectedWalletProvider implements WalletProvider {
             const accounts = await ethereum.send('eth_requestAccounts');
             const provider = new providers.Web3Provider(ethereum)
             this._provider = provider;
+            const { chainId } = await provider.getNetwork();
+            if (!SUPPORTED_NETWORKS[this.currency] || chainId !== SUPPORTED_NETWORKS[this.currency]['chainId']) {
+                throw new Error(`please switch to the right network on your wallet, current chainId: ${chainId}`)
+            }
             const publickey = await this.getPublicKey()
             this.injectedSigner = new InjectedSigner(this, Buffer.from(publickey, 'hex'));
             this.active = true;
